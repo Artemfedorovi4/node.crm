@@ -11,16 +11,19 @@
           <router-link class="nav-link" to="/">Home</router-link>
         </li>
 
-        <li v-if="auth=='' && (token==null || token==undefined)" class="nav-item">
+        <li v-if="auth==''" class="nav-item">
           <router-link class="nav-link" to="/login">Login</router-link>
         </li>
-        <li v-if="auth=='' && (token==null || token==undefined)" class="nav-item">
+        <li v-if="auth==''" class="nav-item">
           <router-link class="nav-link" to="/register">Register</router-link>
         </li>
-        <li v-if="auth=='loggedin' || token!=null || token!=undefined" class="nav-item">
+        <li v-if="auth=='loggedin'" class="nav-item">
           <router-link class="nav-link" to="/profile">Profile</router-link>
         </li>
-        <li v-if="auth=='loggedin' || token!=null || token!=undefined" class="nav-item">
+        <li v-if="auth==''" class="nav-item">
+          <router-link class="nav-link" to="/emploeers">Emp</router-link>
+        </li>
+        <li v-if="auth=='loggedin'" class="nav-item">
           <a class="nav-link" href="" v-on:click="logout">Logout</a>
         </li>
       </ul>
@@ -32,11 +35,15 @@
 
 import EventBus from './EventBus'
 
+EventBus.$on('logged-in', test => {
+  console.log(test)
+})
+
 export default {
   data () {
     return {
       auth: '',
-      token: localStorage.usertoken
+      user: ''
     }
   },
 
@@ -48,6 +55,7 @@ export default {
   },
   mounted () {
     EventBus.$on('logged-in', status => {
+      console.log(`STATUS : !!${status}!!`)
       this.auth = status
     })
   }

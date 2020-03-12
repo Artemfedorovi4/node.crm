@@ -1,2 +1,0 @@
-# node.crm
-CRM

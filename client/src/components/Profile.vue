@@ -10,6 +10,10 @@
             <td>Login:</td>
             <td>{{LOGIN}}</td>
           </tr>
+          <tr>
+            <td>Emp id:</td>
+            <td>{{EMP_ID}}</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -17,15 +21,34 @@
 </template>
 
 <script>
-import jwtDecode from 'jwt-decode'
+import router from '../router'
+import axios from 'axios'
 
 export default {
   data () {
     const token = localStorage.usertoken
-    const decoded = jwtDecode(token)
+
     return {
-      LOGIN: decoded.LOGIN
+      LOGIN: '',
+      EMP_ID: '',
+      token: token
     }
+  },
+  methods: {
+    getuser () {
+      axios.get('/users/profile', {
+        headers: { 'Authorization': this.token }
+      }).then(res => {
+        this.LOGIN = res.data.LOGIN
+        this.EMP_ID = res.data.EMP_ID
+      }).catch(err => {
+        console.log(err)
+        router.push({ name: 'Login' })
+      })
+    }
+  },
+  mounted () {
+    this.getuser()
   }
 }
 </script>

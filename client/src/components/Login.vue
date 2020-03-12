@@ -10,7 +10,7 @@
           </div>
           <div class="form-group">
             <label for="PASSWORD">Password</label>
-            <input type="PASSWORD" v-model="PASSWORD" class="form-control" name="PASSWORD" placeholder="Password">
+            <input type="password" v-model="PASSWORD" class="form-control" name="PASSWORD" placeholder="Password">
           </div>
           <button type="submit" class="btn btn-lg btn-primary btn-block">Sign in</button>
         </form>
@@ -40,14 +40,17 @@ export default {
           PASSWORD: this.PASSWORD
         }
       ).then((res) => {
+        console.log(res)
         localStorage.setItem('usertoken', res.data)
         this.LOGIN = ''
         this.PASSWORD = ''
-        router.push({ name: 'Profile' })
+        if (res) {
+          this.emitMethod()
+          router.push({name: 'Profile'})
+        }
       }).catch((err) => {
         console.log(err)
       })
-      this.emitMethod()
     },
     emitMethod () {
       EventBus.$emit('logged-in', 'loggedin')

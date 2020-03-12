@@ -2,9 +2,9 @@ const express = require('express')
 const users = express.Router()
 const cors = require('cors')
 const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
 
 const User = require('../models/User')
+const Empl = require('../models/Emploeers')
 users.use(cors())
 
 process.env.SECRET_KEY = 'secret'
@@ -63,6 +63,35 @@ users.post('/login', (req, res) => {
     })
     .catch(err => {
       res.status(400).json({ error: err })
+    })
+})
+
+users.get('/profile', (req, res) => {
+  var decoded = jwt.verify(req.headers['authorization'], process.env.SECRET_KEY)
+
+  User.findOne({
+    where: {
+      LOGIN: decoded.LOGIN
+    }
+  })
+    .then(user => {
+      if (user) {
+        res.json(user)
+      } else {
+        res.send('User does not exist')
+      }
+    })
+    .catch(err => {
+      res.send('error: ' + err)
+    })
+})
+
+users.post('/emploeers', (req, res) => {
+  Empl.findAll().then(emploeer => {
+      res.json(emploeer)
+    })
+    .catch(err => {
+      res.send('error: ' + err)
     })
 })
 
