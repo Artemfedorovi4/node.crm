@@ -15,7 +15,7 @@ module.exports = db.sequelize.define(
         type: Sequelize.INTEGER,
         references: {
             model: 'employees',
-            key: 'FIRST_NAME'
+            key: 'USER_ID'
         },
         allowNull: false
     },

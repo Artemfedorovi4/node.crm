@@ -47,6 +47,9 @@ export default {
       })
     }
   },
+  updated () {
+    console.log('updated')
+  },
   mounted () {
     this.getuser()
   }
