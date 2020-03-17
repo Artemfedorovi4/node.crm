@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Paginate from 'vuejs-paginate'
+import store from '../store/store'
 import Home from '@/components/Home'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
@@ -14,9 +14,9 @@ Vue.use(Router)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
-Vue.component('paginate', Paginate)
+// Vue.component('paginate', Paginate)
 
-export default new Router({
+let router = new Router({
   routes: [
     {
       path: '/',
@@ -36,12 +36,32 @@ export default new Router({
     {
       path: '/profile',
       name: 'Profile',
-      component: Profile
+      component: Profile,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/emploeers',
       name: 'Emploeers',
-      component: Emploeers
+      component: Emploeers,
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (store.getters.isLoggedIn) {
+      next()
+      return
+    }
+    next('/login')
+  } else {
+    next()
+  }
+})
+
+export default router

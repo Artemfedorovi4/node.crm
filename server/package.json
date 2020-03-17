@@ -17,10 +17,9 @@
     "mysql": "^2.14.1",
     "mysql2": "^1.6.1",
     "node-gyp": "^6.1.0",
-    "nodemon": "^1.18.3",
-    "sequelize": "^4.38.0",
-    "vue": "^2.6.11",
-    "vue-cli": "^2.9.6",
-    "vuejs-paginate": "^2.1.0"
+    "sequelize": "^4.38.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
   }
 }

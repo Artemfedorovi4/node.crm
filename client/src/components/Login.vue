@@ -30,7 +30,6 @@
 <script>
 // import axios from 'axios'
 import router from '../router'
-import EventBus from './EventBus'
 // import store from '../store/store.js'
 
 export default {
@@ -48,7 +47,7 @@ export default {
         LOGIN: this.LOGIN,
         PASSWORD: this.PASSWORD
       }).then(success => {
-        router.push({name: 'Profile'})
+        router.push({name: 'Emploeers'})
       }).catch(error => {
         console.log(error)
         this.error = true
@@ -71,9 +70,6 @@ export default {
       // }).catch((err) => {
       //   console.log(err)
       // })
-    },
-    emitMethod () {
-      EventBus.$emit('logged-in', 'loggedin')
     }
   }
 }

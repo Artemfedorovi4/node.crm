@@ -4,24 +4,27 @@
       aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse justify-content-md-center" id="navbar1">
-      <ul class="navbar-nav">
+    <a class="navbar-brand" >MyCRM</a>
+    <div class="collapse navbar-collapse justify-content-md-left" id="navbar1">
+      <ul class="navbar-nav mr-auto">
         <li class="nav-item">
           <router-link class="nav-link" to="/">Home</router-link>
         </li>
-        <li v-if="!auth" class="nav-item">
-          <router-link class="nav-link" to="/login">Login</router-link>
-        </li>
-        <li v-if="auth==''" class="nav-item">
-          <router-link class="nav-link" to="/register">Register</router-link>
-        </li>
-        <li v-if="auth=='loggedin'" class="nav-item">
+        <li v-if=" this.$store.getters.authStatus=='success'" class="nav-item">
           <router-link class="nav-link" to="/profile">Profile</router-link>
         </li>
-        <li v-if="auth=='loggedin'" class="nav-item">
+        <li v-if=" this.$store.getters.authStatus=='success'" class="nav-item">
           <router-link class="nav-link" to="/emploeers">Emp</router-link>
         </li>
-        <li v-if="auth=='loggedin'" class="nav-item">
+      </ul>
+      <ul class="navbar-nav">
+        <li v-if="!this.$store.getters.authStatus" class="nav-item">
+          <router-link class="nav-link" to="/login">Login</router-link>
+        </li>
+        <li v-if="!this.$store.getters.authStatus" class="nav-item">
+          <router-link class="nav-link" to="/register">Register</router-link>
+        </li>
+        <li v-if="this.$store.getters.authStatus=='success'" class="nav-item justify-content-md-right">
           <a class="nav-link" href="" v-on:click="logout">Logout</a>
         </li>
       </ul>
@@ -31,25 +34,16 @@
 
 <script>
 
-import EventBus from './EventBus'
 export default {
   data () {
     return {
-      auth: '',
-      logged: false
     }
   },
 
   methods: {
     logout () {
-      localStorage.removeItem('usertoken')
+      this.$store.dispatch('logout')
     }
-  },
-  mounted () {
-    // this.checkIfIsLogged()
-    EventBus.$on('logged-in', status => {
-      this.auth = status
-    })
   }
 }
 </script>

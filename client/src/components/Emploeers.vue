@@ -6,6 +6,8 @@
           <h1 class="text-center">Emploees</h1>
         </div>
         <div class="table-responsive-md">
+          <v-dialog v-model="dialog" max-width="500px">
+          </v-dialog>
           <b-table
             striped
             hover
@@ -14,6 +16,7 @@
             :per-page="perPage"
             :current-page="currentPage"
             :busy="isBusy"
+            @row-dblclicked="ed"
             small>
             <template v-slot:table-busy>
               <div class="text-center text-danger my-2">
@@ -22,7 +25,7 @@
               </div>
             </template>
             <template v-slot:cell(actions)="row">
-              <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
+              <b-button v-b-modal.edit-empl-modal v-if="role=='Manager'" size="sm" class="mr-1">
                 Edit
               </b-button>
               <b-button size="sm" @click="row.toggleDetails">
@@ -36,8 +39,8 @@
               :per-page="perPage"
             ></b-pagination>
             <!-- Info modal -->
-          <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
-            <pre>{{ infoModal.content }}</pre>
+          <b-modal id="edit-empl-modal" :title="editModal.title" ok-only @hidden="resetInfoModal">
+            <pre>{{ editModal.content }}</pre>
           </b-modal>
         </div>
       </div>
@@ -53,8 +56,9 @@ export default {
       isBusy: false,
       perPage: 10,
       currentPage: 1,
+      role: '',
       fields: [
-        { key: 'empl_id', label: 'Emploeer ID', sortable: true, sortDirection: 'desc' },
+        { key: 'empl_id', label: 'ID', sortable: true, sortDirection: 'desc' },
         { key: 'role', label: 'Role', sortable: true, sortDirection: 'desc' },
         { key: 'last_name', label: 'Last Name', sortable: true, sortDirection: 'desc' },
         { key: 'first_name', label: 'First Name', sortable: true, sortDirection: 'desc' },
@@ -63,11 +67,12 @@ export default {
         { key: 'actions', label: 'Actions', sortable: false, sortDirection: 'desc' }
       ],
       items: [],
-      infoModal: {
-        id: 'info-modal',
-        title: '',
-        content: ''
-      }
+      editModal: {
+        id: 'edit-modal',
+        title: 'Modal for edit data',
+        content: 'content'
+      },
+      dialog: false
     }
   },
   computed: {
@@ -81,17 +86,20 @@ export default {
       this.infoModal.content = JSON.stringify(item, null, 2)
       this.$root.$emit('bv::show::modal', this.infoModal.id, button)
     },
+    resetInfoModal () {
+
+    },
     del (id) {
       let row = this.items.findIndex((item) => {
         return item.mess === id
       })
       console.log(this.items[row])
     },
-    ed (id) {
-      let res = this.items.findIndex((itm) => {
-        return itm.USER_ID === id
-      })
-      console.log(this.items[res])
+    ed (record, index) {
+      // let res = this.items.findIndex((itm) => {
+      //   return itm.USER_ID === id
+      // })
+      console.log(record)
     },
     update () {
       this.isBusy = true
@@ -106,6 +114,8 @@ export default {
     }
   },
   mounted () {
+    this.role = this.$store.getters.empRole
+    console.log(this.$store.getters)
     this.update()
   }
 }

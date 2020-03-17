@@ -7,12 +7,16 @@
       <table class="table col-md-6 mx-auto">
         <tbody>
           <tr>
-            <td>Login:</td>
-            <td>{{LOGIN}}</td>
+            <td>User Name:</td>
+            <td>{{username}}</td>
           </tr>
           <tr>
-            <td>Emp id:</td>
-            <td>{{EMP_ID}}</td>
+            <td>Login:</td>
+            <td>{{login}}</td>
+          </tr>
+          <tr>
+            <td>Role:</td>
+            <td>{{role}}</td>
           </tr>
         </tbody>
       </table>
@@ -26,12 +30,11 @@ import axios from 'axios'
 
 export default {
   data () {
-    const token = localStorage.usertoken
-
     return {
-      LOGIN: '',
-      EMP_ID: '',
-      token: token
+      login: '',
+      role: '',
+      username: '',
+      token: localStorage.token
     }
   },
   methods: {
@@ -39,16 +42,14 @@ export default {
       axios.get('/users/profile', {
         headers: { 'Authorization': this.token }
       }).then(res => {
-        this.LOGIN = res.data.LOGIN
-        this.EMP_ID = res.data.EMP_ID
+        this.login = res.data.LOGIN
+        this.role = res.data.employee.roles_ref.ROLE_DESC
+        this.username = res.data.employee.LAST_NAME + ' ' + res.data.employee.FIRST_NAME
       }).catch(err => {
         console.log(err)
-        router.push({ name: 'Login' })
+        router.push({ name: 'Home' })
       })
     }
-  },
-  updated () {
-    console.log('updated')
   },
   mounted () {
     this.getuser()
